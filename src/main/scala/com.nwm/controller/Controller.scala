@@ -1,35 +1,32 @@
 package com.nwm.controller
 import com.nwm.dto.JobParam
 import com.nwm.enricher.BaseEnricher
-import com.nwm.filter.BaseFilter
 import com.nwm.reader.Reader.read
 import com.nwm.writer.Writer.write
 import com.nwm.filter.BaseFilter
 import com.nwm.processor.BaseProcessor
 
-trait Controller {
+trait BaseController {
 
-  def execute (param: JobParam) : List[String] = {
+  def execute (param: JobParam)  : Unit = {
     val filter: BaseFilter = param.filter
     val enricher: BaseEnricher = param.enricher
     val processor: BaseProcessor = param.processor
 
     val lines: List[String] = read("", "")
     if (processor != null && filter != null && enricher != null) {
-      processor.process(enricher.enrich(filter.doFilter(lines)))
+      write(processor.process(enricher.enrich(filter.doFilter(lines))),"","")
     }else if(processor != null && enricher != null){
-      processor.process(enricher.enrich(lines))
+      write(processor.process(enricher.enrich(lines)),"","")
     }else if(processor != null && filter != null){
-      processor.process(filter.doFilter(lines))
+      write(processor.process(filter.doFilter(lines)),"","")
     }else if(processor != null && enricher != null){
-      processor.process(enricher.enrich(lines))
+      write(processor.process(enricher.enrich(lines)),"","")
     }else if(filter != null && enricher != null){
-        enricher.enrich(filter.doFilter(lines))
+      write(enricher.enrich(filter.doFilter(lines)),"","")
     } else if(enricher != null){
-        enricher.enrich(lines)
+      write(enricher.enrich(lines),"","")
     }
-    write("","")
   }
-
 
 }
