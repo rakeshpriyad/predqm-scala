@@ -6,7 +6,7 @@ import com.nwm.writer.Writer.write
 import com.nwm.filter.BaseFilter
 import com.nwm.processor.BaseProcessor
 
-trait BaseController {
+trait Controller {
 
   def execute (param: JobParam)  : Unit = {
     val filter: BaseFilter = param.filter
